@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="list" contenteditable></div>
+    <button id="check">check</button>
+    <div id="available"></div>
+
+    <script>
+        /**
+            @param {string} username
+            @returns {bool}
+        */
+        async function checkGithubAvailablility(username) {
+            await fetch(`http://github.com/${username}`, {
+            }).then(r => r.status == 404)
+        }
+
+        /** @type {HTMLDivElement?} */
+        const list = document.querySelector("#list")
+
+        /** @type {HTMLButtonElement?} */
+        const check = document.querySelector("#check")
+
+        /** @type {HTMLDivElement?} */
+        const available = document.querySelector("#available")
+
+        check.onclick = async () => {
+            available.innerText = await Promise.all(
+                list.innerText
+                    .split("\n")
+                    .filter(line => line != "")
+                    .map((username) => {
+                        return checkGithubAvailablility(username)
+                    })
+            )
+        }
+
+    </script>
+</body>
+
+</html>
