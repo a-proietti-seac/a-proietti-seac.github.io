@@ -21,7 +21,7 @@
         */
         async function checkGithubExists(username) {
             return fetch(`https://github.com/${username}`)
-                .then(r => r.status == 200)
+                .then(r => r.status != 404)
                 .then(exists => ({ username, exists }))
         }
 
