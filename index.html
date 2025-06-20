@@ -17,11 +17,12 @@
     <script>
         /**
             @param {string} username
-            @returns {bool}
+            @returns {Promise<{ username: string; exists: boolean; }>}
         */
-        async function checkGithubAvailablility(username) {
-            await fetch(`https://github.com/${username}`, { mode: "no-cors" }, {
-            }).then(r => r.status == 404)
+        async function checkGithubExists(username) {
+            return fetch(`https://github.com/${username}`)
+                .then(r => r.status == 200)
+                .then(exists => ({ username, exists }))
         }
 
         /** @type {HTMLDivElement?} */
@@ -34,14 +35,18 @@
         const available = document.querySelector("#available")
 
         check.onclick = async () => {
-            available.innerText = await Promise.all(
+            const responses = await Promise.all(
                 list.innerText
                     .split("\n")
                     .filter(line => line != "")
-                    .map((username) => {
-                        return checkGithubAvailablility(username)
-                    })
+                    .map(checkGithubExists)
             )
+
+            available.innerText = responses
+                .filter(v => !v.exists)
+                .map(v => v.username)
+                .join("\n")
+
         }
 
     </script>
