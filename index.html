@@ -18,7 +18,7 @@
             @returns {bool}
         */
         async function checkGithubAvailablility(username) {
-            await fetch(`https://github.com/${username}`, {
+            await fetch(`https://github.com/${username}`, { mode: "no-cors" }, {
             }).then(r => r.status == 404)
         }
 
