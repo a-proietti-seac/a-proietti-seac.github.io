@@ -20,7 +20,7 @@
             @returns {Promise<{ username: string; exists: boolean; }>}
         */
         async function checkGithubExists(username) {
-            return fetch(`https://github.com/${username}`)
+            return fetch(`https://github.com/${username}`, { mode: "no-cors" })
                 .then(r => r.status == 200)
                 .then(exists => ({ username, exists }))
         }
