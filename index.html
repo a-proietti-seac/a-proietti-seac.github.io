@@ -42,6 +42,8 @@
                     .map(checkGithubExists)
             )
 
+            console.log(responses)
+
             available.innerText = responses
                 .filter(v => !v.exists)
                 .map(v => v.username)
